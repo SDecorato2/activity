@@ -391,7 +391,7 @@ public class AccountBookListViewActivity extends AppCompatActivity
         loadLogo();
     }
 
-    private setUser (User user){
+    private void setUser (User user){
         if (user != null) {
             userName.setText(user.getUsername());
             userEmail.setText(user.getEmail());
