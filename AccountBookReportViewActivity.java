@@ -7,12 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
@@ -24,6 +22,10 @@ import com.nightonke.saver.fragment.ReportViewFragment;
 import com.nightonke.saver.model.SettingManager;
 import com.nightonke.saver.util.CoCoinUtil;
 
+/**
+ * @author
+ * @version
+ */
 public class AccountBookReportViewActivity extends AppCompatActivity
         implements
         ReportViewFragment.OnTitleChangedListener {

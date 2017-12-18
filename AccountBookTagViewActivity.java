@@ -1,9 +1,6 @@
 package com.nightonke.saver.activity;
-
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
+import android.graphics.*;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,42 +15,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
-import com.daimajia.slider.library.Indicators.PagerIndicator;
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.github.florent37.materialviewpager.MaterialViewPager;
-import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
-import com.github.florent37.materialviewpager.header.HeaderDesign;
+import com.daimajia.slider.library.*;
+import com.github.florent37.materialviewpager.*;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.nightonke.saver.BuildConfig;
-import com.nightonke.saver.R;
-import com.nightonke.saver.adapter.DrawerTagChooseGridViewAdapter;
-import com.nightonke.saver.adapter.TagViewFragmentAdapter;
-import com.nightonke.saver.model.Logo;
-import com.nightonke.saver.model.RecordManager;
-import com.nightonke.saver.model.SettingManager;
-import com.nightonke.saver.model.User;
-import com.nightonke.saver.ui.CustomSliderView;
-import com.nightonke.saver.ui.MyGridView;
-import com.nightonke.saver.util.CoCoinUtil;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.List;
-
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.listener.FindListener;
+import com.nightonke.*;
+import java.io.*;
+import java.util.*;
+import cn.bmob.v3.*;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * @author
+ * @version
+ */
 public class AccountBookTagViewActivity extends AppCompatActivity {
 
     private MaterialViewPager mViewPager;
@@ -258,6 +236,11 @@ public class AccountBookTagViewActivity extends AppCompatActivity {
     }
 
     private MaterialDialog progressDialog;
+
+    /**
+     * @author
+     * @version
+     */
     public class LoadViews extends AsyncTask<String, Void, String> {
 
         @Override
@@ -312,7 +295,7 @@ public class AccountBookTagViewActivity extends AppCompatActivity {
                     profileImage.setImageBitmap(b);
                 }
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                System.out.println("Something was wrong");
             }
         } else {
             // use the default logo

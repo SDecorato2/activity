@@ -16,9 +16,12 @@ import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
 import com.nightonke.saver.R;
 import com.nightonke.saver.adapter.HelpFragmentAdapter;
-import com.nightonke.saver.fragment.HelpFeedbackFragment;
 import com.nightonke.saver.util.CoCoinUtil;
 
+/**
+ * @author
+ * @version
+ */
 public class AboutActivity extends AppCompatActivity implements HelpFeedbackFragment.OnTextChangeListener {
 
     private MaterialViewPager mViewPager;
@@ -115,8 +118,8 @@ public class AboutActivity extends AppCompatActivity implements HelpFeedbackFrag
     private String feedbackText = "";
     private boolean exceed;
     @Override
-    public void onTextChange(String text, boolean exceed) {
-        feedbackText = text;
-        this.exceed = exceed;
+    public void onTextChange(String testo, boolean exce) {
+        feedbackText = testo;
+        this.exceed = exce;
     }
 }

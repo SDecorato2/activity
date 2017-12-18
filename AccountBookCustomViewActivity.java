@@ -18,6 +18,10 @@ import com.nightonke.saver.adapter.CustomViewFragmentAdapter;
 import com.nightonke.saver.model.SettingManager;
 import com.nightonke.saver.util.CoCoinUtil;
 
+/**
+ * @author
+ * @version
+ */
 public class AccountBookCustomViewActivity extends AppCompatActivity {
 
     private MaterialViewPager mViewPager;
