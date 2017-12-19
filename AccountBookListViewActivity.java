@@ -31,7 +31,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -86,6 +86,10 @@ import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
+/**
+ * @author Liu Ji
+ * @version 1.3
+ */
 public class AccountBookListViewActivity extends AppCompatActivity
         implements
         View.OnClickListener,
@@ -93,6 +97,7 @@ public class AccountBookListViewActivity extends AppCompatActivity
         MySwipeableItemAdapter.OnItemDeleteListener,
         MySwipeableItemAdapter.OnItemClickListener {
 
+    //some declarations
     private MaterialSearchView searchView;
 
     private Context mContext;
@@ -520,11 +525,15 @@ public class AccountBookListViewActivity extends AppCompatActivity
         date.setText(RecordManager.SELECTED_RECORDS.get(position).getCalendarString());
     }
 
-    public class SelectRecordsByRemark extends AsyncTask<String, Void, String> {
-
+    /**
+     * @author
+     * @version
+     */
+    private class SelectRecordsByRemark extends AsyncTask<String, Void, String> {
+    //some function
         private String sub;
 
-        public SelectRecordsByRemark(String sub) {
+        private SelectRecordsByRemark(String sub) {
             this.sub = sub;
         }
 
@@ -567,8 +576,12 @@ public class AccountBookListViewActivity extends AppCompatActivity
         }
     }
 
-    public class SelectRecords extends AsyncTask<String, Void, String> {
-
+    /**
+     * @author
+     * @version
+     */
+    private class SelectRecords extends AsyncTask<String, Void, String> {
+    //some function
         @Override
         protected String doInBackground(String... params) {
             RecordManager.getInstance(mContext).SELECTED_SUM = 0d;

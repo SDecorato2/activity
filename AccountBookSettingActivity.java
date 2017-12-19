@@ -68,7 +68,7 @@ import cn.bmob.v3.listener.UploadFileListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountBookSettingActivity extends AppCompatActivity
-    implements
+        implements
         View.OnClickListener,
         ColorChooserDialog.ColorCallback,
         OnCheckedChangeListener {
@@ -215,28 +215,15 @@ public class AccountBookSettingActivity extends AppCompatActivity
         }
     }
 
-    public void v1(){
-        setTipeD(isChecked,view);
-        setTipeE(isChecked,view);
-    }
-
-    public void v2(){
-        setTipeA(isChecked,view);
-        setTipeB(isChecked,view);
-        setTipeC(isChecked,view);
-    }
-
-// switch change listener///////////////////////////////////////////////////////////////////////////
+    // switch change listener///////////////////////////////////////////////////////////////////////////
     @Override
 
     public void onCheckedChanged(Switch view, boolean isChecked) {
-        boolean b= true;
-        if(b){
-            v2();
-        }
-        else{
-          v1();
-        }
+        setTipeA(isChecked,view);
+        setTipeB(isChecked,view);
+        setTipeC(isChecked,view);
+        setTipeD(isChecked,view);
+        setTipeE(isChecked,view);
     }
 
     public int checktype(Switch view){
@@ -265,7 +252,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
                 && SettingManager.getInstance().getIsMonthLimit());
     }
     public void setTipeA(boolean isChecked,Switch view){
-        if((view) == R.id.month_limit_enable_button ) {
+        if(checktype(view) == R.id.month_limit_enable_button ) {
             SettingManager.getInstance().setIsMonthLimit(isChecked);
             updateSettingsToServer(UPDATE_IS_MONTH_LIMIT);
             SettingManager.getInstance().setMainViewMonthExpenseShouldChange(true);
@@ -316,7 +303,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         }
     }
 
-// Load logo from local/////////////////////////////////////////////////////////////////////////////
+    // Load logo from local/////////////////////////////////////////////////////////////////////////////
     private void loadLogo() {
         User user = BmobUser.getCurrentUser(CoCoinApplication.getAppContext(), User.class);
         if (user != null) {
@@ -366,7 +353,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         }
     }
 
-// change the user logo/////////////////////////////////////////////////////////////////////////////
+    // change the user logo/////////////////////////////////////////////////////////////////////////////
     private void changeLogo() {
         User user = BmobUser.getCurrentUser(CoCoinApplication.getAppContext(), User.class);
         if (user == null) {
@@ -419,7 +406,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
                 .show();
     }
 
-// Crop a picture///////////////////////////////////////////////////////////////////////////////////
+    // Crop a picture///////////////////////////////////////////////////////////////////////////////////
     public void cropPhoto(Uri uri) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
@@ -434,7 +421,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         startActivityForResult(intent, 3);
     }
 
-// After select a picture///////////////////////////////////////////////////////////////////////////
+    // After select a picture///////////////////////////////////////////////////////////////////////////
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case 1:
@@ -470,7 +457,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-// Storage a picture////////////////////////////////////////////////////////////////////////////////
+    // Storage a picture////////////////////////////////////////////////////////////////////////////////
     private void setPicToView(Bitmap mBitmap) {
         FileOutputStream b = null;
         File file = new File(CoCoinApplication.getAppContext().getFilesDir() + CoCoinUtil.LOGO_NAME);
@@ -492,7 +479,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         }
     }
 
-// download logo to local///////////////////////////////////////////////////////////////////////////
+    // download logo to local///////////////////////////////////////////////////////////////////////////
     private void downloadLogoFromServer() {
         User user = getCurrentUser();
         if (user.getLogoObjectId() == null) {
@@ -503,14 +490,14 @@ public class AccountBookSettingActivity extends AppCompatActivity
         bmobQuery.addWhereEqualTo("objectId", user.getLogoObjectId());
         bmobQuery.findObjects(CoCoinApplication.getAppContext()
                 , new FindListener<Logo>() {
-            @Override
-            public void onSuccess(List<Logo> object) {
+                    @Override
+                    public void onSuccess(List<Logo> object) {
 // there has been an old logo in the server/////////////////////////////////////////////////////////
-                Log.d("Saver", "There is an old logo");
-                String url = object.get(0).getFile().getUrl();
-                Ion.with(CoCoinApplication.getAppContext()).load(url)
-                        .write(new File(CoCoinApplication.getAppContext().getFilesDir()
-                                + CoCoinUtil.LOGO_NAME))
+                        Log.d("Saver", "There is an old logo");
+                        String url = object.get(0).getFile().getUrl();
+                        Ion.with(CoCoinApplication.getAppContext()).load(url)
+                                .write(new File(CoCoinApplication.getAppContext().getFilesDir()
+                                        + CoCoinUtil.LOGO_NAME))
                                 .setCallback(new FutureCallback<File>() {
                                     @Override
                                     public void onCompleted(Exception e, File file) {
@@ -525,17 +512,17 @@ public class AccountBookSettingActivity extends AppCompatActivity
                                         SettingManager.getInstance().setHasLogo(true);
                                     }
                                 });
-                SettingManager.getInstance().setTodayViewLogoShouldChange(true);
-            }
-            @Override
-            public void onError(int code, String msg) {
-                // the picture is lost
-                Log.d("Saver", "Can't find the old logo in server.");
-            }
-        });
+                        SettingManager.getInstance().setTodayViewLogoShouldChange(true);
+                    }
+                    @Override
+                    public void onError(int code, String msg) {
+                        // the picture is lost
+                        Log.d("Saver", "Can't find the old logo in server.");
+                    }
+                });
     }
 
-// update a logo to server//////////////////////////////////////////////////////////////////////////
+    // update a logo to server//////////////////////////////////////////////////////////////////////////
     private void uploadLogoToServer() {
         if (!SettingManager.getInstance().getHasLogo()) {
             // the user haven't set the logo
@@ -552,61 +539,61 @@ public class AccountBookSettingActivity extends AppCompatActivity
                 bmobQuery.addWhereEqualTo("objectId", user.getLogoObjectId());
                 bmobQuery.findObjects(CoCoinApplication.getAppContext()
                         , new FindListener<Logo>() {
-                    @Override
-                    public void onSuccess(List<Logo> object) {
+                            @Override
+                            public void onSuccess(List<Logo> object) {
 // there has been an old logo in the server/////////////////////////////////////////////////////////
 // then there must be an old logo file in server////////////////////////////////////////////////////
 // then we should delete the old one////////////////////////////////////////////////////////////////
-                        Log.d("Saver", "There is an old logo");
-                        String url = object.get(0).getFile().getUrl();
-                        BmobFile oldLogoFile = new BmobFile();
-                        oldLogoFile.setUrl(url);
-                        oldLogoFile.delete(CoCoinApplication.getAppContext(), new DeleteListener() {
-                            @Override
-                            public void onSuccess() {
-                                Log.d("Saver", "Successfully delete the old logo.");
-// after delete, we should upload a new logo file///////////////////////////////////////////////////
-                                final BmobFile newLogoFile = new BmobFile(file);
-                                newLogoFile.uploadblock(CoCoinApplication.getAppContext(),
-                                        new UploadFileListener() {
+                                Log.d("Saver", "There is an old logo");
+                                String url = object.get(0).getFile().getUrl();
+                                BmobFile oldLogoFile = new BmobFile();
+                                oldLogoFile.setUrl(url);
+                                oldLogoFile.delete(CoCoinApplication.getAppContext(), new DeleteListener() {
                                     @Override
                                     public void onSuccess() {
-// after upload the new logo file, we should put the new logo the Logo table////////////////////////
-                                        Logo newLogo = new Logo(newLogoFile);
-                                        newLogo.update(CoCoinApplication.getAppContext(),
-                                                user.getLogoObjectId(), new UpdateListener() {
+                                        Log.d("Saver", "Successfully delete the old logo.");
+// after delete, we should upload a new logo file///////////////////////////////////////////////////
+                                        final BmobFile newLogoFile = new BmobFile(file);
+                                        newLogoFile.uploadblock(CoCoinApplication.getAppContext(),
+                                                new UploadFileListener() {
                                                     @Override
                                                     public void onSuccess() {
-                                                        Log.d("Saver", "Update logo successfully");
-                                                    }
+// after upload the new logo file, we should put the new logo the Logo table////////////////////////
+                                                        Logo newLogo = new Logo(newLogoFile);
+                                                        newLogo.update(CoCoinApplication.getAppContext(),
+                                                                user.getLogoObjectId(), new UpdateListener() {
+                                                                    @Override
+                                                                    public void onSuccess() {
+                                                                        Log.d("Saver", "Update logo successfully");
+                                                                    }
 
+                                                                    @Override
+                                                                    public void onFailure(int arg0, String arg1) {
+                                                                        Log.d("Saver", "Update logo failed " + arg1);
+                                                                    }
+                                                                });
+                                                    }
+                                                    @Override
+                                                    public void onProgress(Integer arg0) {
+                                                    }
                                                     @Override
                                                     public void onFailure(int arg0, String arg1) {
-                                                        Log.d("Saver", "Update logo failed " + arg1);
+                                                        Log.d("Saver", "Upload failed " + arg1);
                                                     }
                                                 });
                                     }
                                     @Override
-                                    public void onProgress(Integer arg0) {
-                                    }
-                                    @Override
-                                    public void onFailure(int arg0, String arg1) {
-                                        Log.d("Saver", "Upload failed " + arg1);
+                                    public void onFailure(int code, String msg) {
+                                        Log.d("Saver", "Fail to delete the old logo. " + msg);
                                     }
                                 });
                             }
                             @Override
-                            public void onFailure(int code, String msg) {
-                                Log.d("Saver", "Fail to delete the old logo. " + msg);
+                            public void onError(int code, String msg) {
+                                // the picture is lost
+                                Log.d("Saver", "Can't find the old logo in server.");
                             }
                         });
-                    }
-                    @Override
-                    public void onError(int code, String msg) {
-                        // the picture is lost
-                        Log.d("Saver", "Can't find the old logo in server.");
-                    }
-                });
             } else {
 // the user has no logo before//////////////////////////////////////////////////////////////////////
                 final BmobFile newLogoFile = new BmobFile(file);
@@ -638,7 +625,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         }
     }
 
-// the user's operation when clicking the first card view///////////////////////////////////////////
+    // the user's operation when clicking the first card view///////////////////////////////////////////
     private void userOperator() {
         if (!SettingManager.getInstance().getLoggenOn()) {
             // register or log on
@@ -691,7 +678,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         }
     }
 
-// User log out/////////////////////////////////////////////////////////////////////////////////////
+    // User log out/////////////////////////////////////////////////////////////////////////////////////
     private void userLogout() {
         BmobUser.logOut(CoCoinApplication.getAppContext());
         SettingManager.getInstance().setTodayViewInfoShouldChange(true);
@@ -703,105 +690,10 @@ public class AccountBookSettingActivity extends AppCompatActivity
         showToast(8, "");
     }
 
-// User login///////////////////////////////////////////////////////////////////////////////////////
+    // User login///////////////////////////////////////////////////////////////////////////////////////
     MaterialDialog loginDialog;
     View loginDialogView;
     CircularProgressButton loginDialogButton;
-
-    public void b1(){
-        @Override
-        public void onSuccess() {
-            loginDialog.setCancelable(true);
-            loginDialogButton.setProgress(0);
-            loginDialogButton.setIdleText(getResourceString(R.string.login_complete));
-// login successfully through user name/////////////////////////////////////////////////////////////
-            SettingManager.getInstance().setTodayViewInfoShouldChange(true);
-            User loginUser =
-                    BmobUser.getCurrentUser(CoCoinApplication.getAppContext(), User.class);
-            if (!CoCoinApplication.getAndroidId().equals(loginUser.getAndroidId())) {
-// 2 users on one mobile////////////////////////////////////////////////////////////////////////////
-                showToast(7, "unique...");
-                return;
-            }
-            SettingManager.getInstance().setLoggenOn(true);
-            SettingManager.getInstance().setUserName(loginUserName.getText().toString());
-            SettingManager.getInstance().setUserEmail(
-                    loginUser.getEmail());
-            updateViews();
-            // use a new method
-//                        RecordManager.updateOldRecordsToServer();
-            whetherSyncSettingsFromServer();
-            showToast(6, loginUserName.getText().toString());
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (loginDialog != null) loginDialog.dismiss();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS,0);
-                }
-            }, 500);
-        }
-    }
-
-    public void b2(){
-        @Override
-        public void onSuccess() {
-            loginDialog.setCancelable(true);
-            loginDialogButton.setProgress(0);
-            loginDialogButton.setIdleText(getResourceString(R.string.login_complete));
-// login successfully through user email////////////////////////////////////////////////////////////
-            SettingManager.getInstance().setTodayViewInfoShouldChange(true);
-            User loginUser =
-                    BmobUser.getCurrentUser(CoCoinApplication.getAppContext(), User.class);
-            if (!CoCoinApplication.getAndroidId().equals(loginUser.getAndroidId())) {
-// 2 users on one mobile////////////////////////////////////////////////////////////////////////////
-                showToast(7, "unique...");
-                return;
-            }
-            String userName = loginUser.getUsername();
-            SettingManager.getInstance().setLoggenOn(true);
-            SettingManager.getInstance().setUserName(userName);
-            SettingManager.getInstance().setUserEmail(loginUserName.getText().toString());
-            SettingManager.getInstance().setUserPassword(loginPassword.getText().toString());
-            updateViews();
-            // use a new method
-//                                RecordManager.updateOldRecordsToServer();
-            whetherSyncSettingsFromServer();
-            showToast(6, userName);
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (loginDialog != null) loginDialog.dismiss();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS,0);
-                }
-            }, 500);
-        }
-    }
-
-    public void b3(){
-        @Override
-        public void onFailure(int code, String msg) {
-// try with user email//////////////////////////////////////////////////////////////////////////////
-            user.setEmail(loginUserName.getText().toString());
-            user.login(CoCoinApplication.getAppContext(), new SaveListener() {
-                b2();
-                // login fail through user name and email///////////////////////////////////////////////////////////
-                @Override
-                public void onFailure(int code, String msg) {
-                    loginDialog.setCancelable(true);
-                    loginDialogButton.setProgress(0);
-                    String tip = getResourceString(R.string.network_disconnection);
-                    if (msg.charAt(0) == 'u') tip = getResourceString(R.string.user_name_or_password_incorrect);
-                    if (msg.charAt(1) == 'n') tip = getResourceString(R.string.user_mobile_exist);
-                    loginDialogButton.setIdleText(tip);
-                }
-            });
-        }
-    }
-
     private void userLogin() {
         loginDialog = new MaterialDialog.Builder(this)
                 .title(R.string.go_login)
@@ -826,10 +718,92 @@ public class AccountBookSettingActivity extends AppCompatActivity
                 user.setUsername(loginUserName.getText().toString());
                 user.setPassword(loginPassword.getText().toString());
                 user.login(CoCoinApplication.getAppContext(), new SaveListener() {
-// try with user name///////////////////////////////////////////////////////////////////////////////
-                    b1();
+                    // try with user name///////////////////////////////////////////////////////////////////////////////
+                    @Override
+                    public void onSuccess() {
+                        loginDialog.setCancelable(true);
+                        loginDialogButton.setProgress(0);
+                        loginDialogButton.setIdleText(getResourceString(R.string.login_complete));
+// login successfully through user name/////////////////////////////////////////////////////////////
+                        SettingManager.getInstance().setTodayViewInfoShouldChange(true);
+                        User loginUser =
+                                BmobUser.getCurrentUser(CoCoinApplication.getAppContext(), User.class);
+                        if (!CoCoinApplication.getAndroidId().equals(loginUser.getAndroidId())) {
+// 2 users on one mobile////////////////////////////////////////////////////////////////////////////
+                            showToast(7, "unique...");
+                            return;
+                        }
+                        SettingManager.getInstance().setLoggenOn(true);
+                        SettingManager.getInstance().setUserName(loginUserName.getText().toString());
+                        SettingManager.getInstance().setUserEmail(
+                                loginUser.getEmail());
+                        updateViews();
+                        // use a new method
+//                        RecordManager.updateOldRecordsToServer();
+                        whetherSyncSettingsFromServer();
+                        showToast(6, loginUserName.getText().toString());
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (loginDialog != null) loginDialog.dismiss();
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS,0);
+                            }
+                        }, 500);
+                    }
                     // login fail through user name/////////////////////////////////////////////////////////////////////
-                    b3();
+                    @Override
+                    public void onFailure(int code, String msg) {
+// try with user email//////////////////////////////////////////////////////////////////////////////
+                        user.setEmail(loginUserName.getText().toString());
+                        user.login(CoCoinApplication.getAppContext(), new SaveListener() {
+                            @Override
+                            public void onSuccess() {
+                                loginDialog.setCancelable(true);
+                                loginDialogButton.setProgress(0);
+                                loginDialogButton.setIdleText(getResourceString(R.string.login_complete));
+// login successfully through user email////////////////////////////////////////////////////////////
+                                SettingManager.getInstance().setTodayViewInfoShouldChange(true);
+                                User loginUser =
+                                        BmobUser.getCurrentUser(CoCoinApplication.getAppContext(), User.class);
+                                if (!CoCoinApplication.getAndroidId().equals(loginUser.getAndroidId())) {
+// 2 users on one mobile////////////////////////////////////////////////////////////////////////////
+                                    showToast(7, "unique...");
+                                    return;
+                                }
+                                String userName = loginUser.getUsername();
+                                SettingManager.getInstance().setLoggenOn(true);
+                                SettingManager.getInstance().setUserName(userName);
+                                SettingManager.getInstance().setUserEmail(loginUserName.getText().toString());
+                                SettingManager.getInstance().setUserPassword(loginPassword.getText().toString());
+                                updateViews();
+                                // use a new method
+//                                RecordManager.updateOldRecordsToServer();
+                                whetherSyncSettingsFromServer();
+                                showToast(6, userName);
+                                final Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (loginDialog != null) loginDialog.dismiss();
+                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS,0);
+                                    }
+                                }, 500);
+                            }
+                            // login fail through user name and email///////////////////////////////////////////////////////////
+                            @Override
+                            public void onFailure(int code, String msg) {
+                                loginDialog.setCancelable(true);
+                                loginDialogButton.setProgress(0);
+                                String tip = getResourceString(R.string.network_disconnection);
+                                if (msg.charAt(0) == 'u') tip = getResourceString(R.string.user_name_or_password_incorrect);
+                                if (msg.charAt(1) == 'n') tip = getResourceString(R.string.user_mobile_exist);
+                                loginDialogButton.setIdleText(tip);
+                            }
+                        });
+                    }
                 });
             }
         });
@@ -884,168 +858,10 @@ public class AccountBookSettingActivity extends AppCompatActivity
                         && 0 < loginPassword.getText().toString().length());
     }
 
-// User register////////////////////////////////////////////////////////////////////////////////////
+    // User register////////////////////////////////////////////////////////////////////////////////////
     MaterialDialog registerDialog;
     View registerDialogView;
     CircularProgressButton registerDialogButton;
-
-
-    public void n1(){
-        @Override
-        public void onSuccess() {
-            registerDialogButton.setProgress(0);
-            registerDialog.setCancelable(true);
-            registerDialogButton.setIdleText(getResourceString(R.string.register_complete));
-// if register successfully/////////////////////////////////////////////////////////////////////////
-            SettingManager.getInstance().setLoggenOn(true);
-            SettingManager.getInstance().setUserName(registerUserName.getText().toString());
-            SettingManager.getInstance().setUserEmail(registerUserEmail.getText().toString());
-            SettingManager.getInstance().setUserPassword(registerPassword.getText().toString());
-            showToast(4, registerUserName.getText().toString());
-// if login successfully////////////////////////////////////////////////////////////////////////////
-            user.login(CoCoinApplication.getAppContext(), new SaveListener() {
-                @Override
-                public void onSuccess() {
-                    SettingManager.getInstance().setTodayViewInfoShouldChange(true);
-                    updateViews();
-                    // use a new method
-//                                RecordManager.updateOldRecordsToServer();
-                }
-                @Override
-                public void onFailure(int code, String msg) {
-// if login failed//////////////////////////////////////////////////////////////////////////////////
-                }
-            });
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    checkRegisterDialog();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS,0);
-                }
-            }, 500);
-        }
-    }
-
-    public void n2(){
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            boolean emailOK = emailValidator.validate(registerUserEmail.getText().toString());
-            registerDialogButton.setEnabled(
-                    0 < registerUserName.getText().toString().length()
-                            && registerUserName.getText().toString().length() <= 16
-                            && registerPassword.getText().toString().length() > 0
-                            && emailOK);
-            if (emailValidator.validate(registerUserEmail.getText().toString())) {
-                registerUserEmail.validate();
-            } else {
-                registerUserEmail.invalidate();
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    }
-
-    public void n3(){
-        public void onClick(View v) {
-            registerDialogButton.setProgress(1);
-            registerDialog.setCancelable(false);
-// User register, a new user////////////////////////////////////////////////////////////////////////
-            final User user = new User();
-            // basic info
-            user.setUsername(registerUserName.getText().toString());
-            user.setPassword(registerPassword.getText().toString());
-            user.setEmail(registerUserEmail.getText().toString());
-            user.setAndroidId(CoCoinApplication.getAndroidId());
-            if (BuildConfig.DEBUG) Log.d("CoCoin", "Android Id: " + user.getAndroidId());
-            // settings info
-            // user.setLogo();
-            user.setIsMonthLimit(SettingManager.getInstance().getIsMonthLimit());
-            user.setMonthLimit(SettingManager.getInstance().getMonthLimit());
-            user.setIsColorRemind(SettingManager.getInstance().getIsColorRemind());
-            user.setMonthWarning(SettingManager.getInstance().getMonthWarning());
-            user.setRemindColor(SettingManager.getInstance().getRemindColor());
-            user.setIsForbidden(SettingManager.getInstance().getIsForbidden());
-            user.setAccountBookName(SettingManager.getInstance().getAccountBookName());
-            user.setAccountBookPassword(SettingManager.getInstance().getPassword());
-            // Todo store tag order
-            user.setShowPicture(SettingManager.getInstance().getShowPicture());
-            user.setIsHollow(SettingManager.getInstance().getIsHollow());
-            user.setLogoObjectId("");
-            user.signUp(CoCoinApplication.getAppContext(), new SaveListener() {
-                n1();
-                // if register failed///////////////////////////////////////////////////////////////////////////////
-                @Override
-                public void onFailure(int code, String msg) {
-                    supportOnFailure(msg);
-                }
-            });
-        }
-    }
-
-
-    public void n4(){
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            boolean emailOK = emailValidator.validate(registerUserEmail.getText().toString());
-            registerDialogButton.setEnabled(
-                    0 < registerUserName.getText().toString().length()
-                            && registerUserName.getText().toString().length() <= 16
-                            && registerPassword.getText().toString().length() > 0
-                            && emailOK);
-            if (emailValidator.validate(registerUserEmail.getText().toString())) {
-                registerUserEmail.validate();
-            } else {
-                registerUserEmail.invalidate();
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    }
-
-    public void n5(){
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            boolean emailOK = emailValidator.validate(registerUserEmail.getText().toString());
-            registerDialogButton.setEnabled(
-                    0 < registerUserName.getText().toString().length()
-                            && registerUserName.getText().toString().length() <= 16
-                            && registerPassword.getText().toString().length() > 0
-                            && emailOK);
-            if (emailValidator.validate(registerUserEmail.getText().toString())) {
-                registerUserEmail.validate();
-            } else {
-                registerUserEmail.invalidate();
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    }
-
     private void userRegister() {
         registerDialog = new MaterialDialog.Builder(this)
                 .title(R.string.go_register)
@@ -1060,7 +876,74 @@ public class AccountBookSettingActivity extends AppCompatActivity
         registerDialogButton.setTypeface(CoCoinUtil.GetTypeface());
         registerDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            n3();
+            public void onClick(View v) {
+                registerDialogButton.setProgress(1);
+                registerDialog.setCancelable(false);
+// User register, a new user////////////////////////////////////////////////////////////////////////
+                final User user = new User();
+                // basic info
+                user.setUsername(registerUserName.getText().toString());
+                user.setPassword(registerPassword.getText().toString());
+                user.setEmail(registerUserEmail.getText().toString());
+                user.setAndroidId(CoCoinApplication.getAndroidId());
+                if (BuildConfig.DEBUG) Log.d("CoCoin", "Android Id: " + user.getAndroidId());
+                // settings info
+                // user.setLogo();
+                user.setIsMonthLimit(SettingManager.getInstance().getIsMonthLimit());
+                user.setMonthLimit(SettingManager.getInstance().getMonthLimit());
+                user.setIsColorRemind(SettingManager.getInstance().getIsColorRemind());
+                user.setMonthWarning(SettingManager.getInstance().getMonthWarning());
+                user.setRemindColor(SettingManager.getInstance().getRemindColor());
+                user.setIsForbidden(SettingManager.getInstance().getIsForbidden());
+                user.setAccountBookName(SettingManager.getInstance().getAccountBookName());
+                user.setAccountBookPassword(SettingManager.getInstance().getPassword());
+                // Todo store tag order
+                user.setShowPicture(SettingManager.getInstance().getShowPicture());
+                user.setIsHollow(SettingManager.getInstance().getIsHollow());
+                user.setLogoObjectId("");
+                user.signUp(CoCoinApplication.getAppContext(), new SaveListener() {
+                    @Override
+                    public void onSuccess() {
+                        registerDialogButton.setProgress(0);
+                        registerDialog.setCancelable(true);
+                        registerDialogButton.setIdleText(getResourceString(R.string.register_complete));
+// if register successfully/////////////////////////////////////////////////////////////////////////
+                        SettingManager.getInstance().setLoggenOn(true);
+                        SettingManager.getInstance().setUserName(registerUserName.getText().toString());
+                        SettingManager.getInstance().setUserEmail(registerUserEmail.getText().toString());
+                        SettingManager.getInstance().setUserPassword(registerPassword.getText().toString());
+                        showToast(4, registerUserName.getText().toString());
+// if login successfully////////////////////////////////////////////////////////////////////////////
+                        user.login(CoCoinApplication.getAppContext(), new SaveListener() {
+                            @Override
+                            public void onSuccess() {
+                                SettingManager.getInstance().setTodayViewInfoShouldChange(true);
+                                updateViews();
+                                // use a new method
+//                                RecordManager.updateOldRecordsToServer();
+                            }
+                            @Override
+                            public void onFailure(int code, String msg) {
+// if login failed//////////////////////////////////////////////////////////////////////////////////
+                            }
+                        });
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                checkRegisterDialog();
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS,0);
+                            }
+                        }, 500);
+                    }
+                    // if register failed///////////////////////////////////////////////////////////////////////////////
+                    @Override
+                    public void onFailure(int code, String msg) {
+                        supportOnFailure(msg);
+                    }
+                });
+            }
         });
 
         final MDButton positiveAction = registerDialog.getActionButton(DialogAction.POSITIVE);
@@ -1086,24 +969,90 @@ public class AccountBookSettingActivity extends AppCompatActivity
 
         registerUserName.setTypeface(CoCoinUtil.GetTypeface());
         registerUserName.addTextChangedListener(new TextWatcher() {
-            n2();
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                boolean emailOK = emailValidator.validate(registerUserEmail.getText().toString());
+                registerDialogButton.setEnabled(
+                        0 < registerUserName.getText().toString().length()
+                                && registerUserName.getText().toString().length() <= 16
+                                && registerPassword.getText().toString().length() > 0
+                                && emailOK);
+                if (emailValidator.validate(registerUserEmail.getText().toString())) {
+                    registerUserEmail.validate();
+                } else {
+                    registerUserEmail.invalidate();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
         registerUserEmail.setTypeface(CoCoinUtil.GetTypeface());
         registerUserEmail.addTextChangedListener(new TextWatcher() {
             @Override
-            n4();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                boolean emailOK = emailValidator.validate(registerUserEmail.getText().toString());
+                registerDialogButton.setEnabled(
+                        0 < registerUserName.getText().toString().length()
+                                && registerUserName.getText().toString().length() <= 16
+                                && registerPassword.getText().toString().length() > 0
+                                && emailOK);
+                if (emailValidator.validate(registerUserEmail.getText().toString())) {
+                    registerUserEmail.validate();
+                } else {
+                    registerUserEmail.invalidate();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
         registerPassword.setTypeface(CoCoinUtil.GetTypeface());
         registerPassword.addTextChangedListener(new TextWatcher() {
-            n5();
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                boolean emailOK = emailValidator.validate(registerUserEmail.getText().toString());
+                registerDialogButton.setEnabled(
+                        0 < registerUserName.getText().toString().length()
+                                && registerUserName.getText().toString().length() <= 16
+                                && registerPassword.getText().toString().length() > 0
+                                && emailOK);
+                if (emailValidator.validate(registerUserEmail.getText().toString())) {
+                    registerUserEmail.validate();
+                } else {
+                    registerUserEmail.invalidate();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
         registerDialog.show();
     }
-
-
     public void supportOnFailure(String msg){
         if (BuildConfig.DEBUG) Log.d("CoCoin", "Register failed: " + msg);
         String tip = getResourceString(R.string.network_disconnection);
@@ -1118,7 +1067,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         if (registerDialog != null) registerDialog.dismiss();
     }
 
-// Change account book name/////////////////////////////////////////////////////////////////////////
+    // Change account book name/////////////////////////////////////////////////////////////////////////
     private void changeAccountBookName() {
         new MaterialDialog.Builder(this)
                 .theme(Theme.LIGHT)
@@ -1129,26 +1078,26 @@ public class AccountBookSettingActivity extends AppCompatActivity
                 .positiveText(R.string.submit)
                 .input(SettingManager.getInstance().getAccountBookName()
                         , null, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        // local change
-                        SettingManager.getInstance().setAccountBookName(input.toString());
-                        SettingManager.getInstance().setTodayViewTitleShouldChange(true);
-                        SettingManager.getInstance().setMainViewTitleShouldChange(true);
-                        accountBookName.setText(input.toString());
-                        // update change
-                        User user = getCurrentUser();
-                        if (user != null) {
-                                updateSettingsToServer(UPDATE_ACCOUNT_BOOK_NAME);
-                            } else {
-                                // the new account book name is changed successfully
-                                showToast(2, "");
-                        }
-                    }
-                }).show();
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                // local change
+                                SettingManager.getInstance().setAccountBookName(input.toString());
+                                SettingManager.getInstance().setTodayViewTitleShouldChange(true);
+                                SettingManager.getInstance().setMainViewTitleShouldChange(true);
+                                accountBookName.setText(input.toString());
+                                // update change
+                                User user = getCurrentUser();
+                                if (user != null) {
+                                    updateSettingsToServer(UPDATE_ACCOUNT_BOOK_NAME);
+                                } else {
+                                    // the new account book name is changed successfully
+                                    showToast(2, "");
+                                }
+                            }
+                        }).show();
     }
 
-// Update some views when login/////////////////////////////////////////////////////////////////////
+    // Update some views when login/////////////////////////////////////////////////////////////////////
     private void updateViews() {
         setIconEnable(userNameIcon, SettingManager.getInstance().getLoggenOn());
         setIconEnable(userEmailIcon, SettingManager.getInstance().getLoggenOn());
@@ -1165,102 +1114,21 @@ public class AccountBookSettingActivity extends AppCompatActivity
         }
     }
 
-// Start change account book password activity//////////////////////////////////////////////////////
+    // Start change account book password activity//////////////////////////////////////////////////////
 // I put the update to server part in the change password activity but not here/////////////////////
     private void changePassword() {
         Intent intent = new Intent(mContext, EditPasswordActivity.class);
         startActivity(intent);
     }
 
-// Start sort tags activity/////////////////////////////////////////////////////////////////////////
+    // Start sort tags activity/////////////////////////////////////////////////////////////////////////
 // I put the update to server part in the sort tag activity but not here////////////////////////////
     private void sortTags() {
         Intent intent = new Intent(mContext, TagSettingActivity.class);
         startActivity(intent);
     }
 
-
-    public void z1(){
-        if (newExpense < SettingManager.getInstance().getMonthWarning()) {
-            SettingManager.getInstance().setMonthWarning(
-                    ((int)(newExpense * 0.8) / 100 * 100));
-            if (SettingManager.getInstance().getMonthWarning() < 100) {
-                SettingManager.getInstance().setMonthWarning(100);
-            }
-            updateSettingsToServer(UPDATE_MONTH_WARNING);
-            SettingManager.getInstance()
-                    .setMainViewRemindColorShouldChange(true);
-            monthWarning.setText(SettingManager
-                    .getInstance().getMonthWarning().toString());
-        }
-    }
-
-    public void z2(){
-        if (SettingManager.getInstance().getIsMonthLimit()) {
-            new MaterialDialog.Builder(mContext)
-                    .theme(Theme.LIGHT)
-                    .typeface(CoCoinUtil.GetTypeface(), CoCoinUtil.GetTypeface())
-                    .title(R.string.set_month_expense_dialog_title)
-                    .inputType(InputType.TYPE_CLASS_NUMBER)
-                    .positiveText(R.string.submit)
-                    .inputRange(3, 5)
-                    .input(SettingManager.getInstance().getMonthLimit().toString()
-                            , null, new MaterialDialog.InputCallback() {
-                                @Override
-                                public void onInput(MaterialDialog dialog, CharSequence input) {
-                                    int newExpense = SettingManager.getInstance().getMonthLimit();
-                                    if (input.length() != 0) {
-                                        newExpense = Integer.parseInt(input.toString());
-                                    }
-                                    // the month limit must be smaller than the month warning
-                                    z1();
-                                    SettingManager.getInstance().setMonthLimit(newExpense);
-                                    updateSettingsToServer(UPDATE_MONTH_LIMIT);
-                                    SettingManager.getInstance()
-                                            .setTodayViewMonthExpenseShouldChange(true);
-                                    SettingManager.getInstance()
-                                            .setMainViewMonthExpenseShouldChange(true);
-                                    monthMaxExpense.withNumber(SettingManager.getInstance()
-                                            .getMonthLimit()).setDuration(1000).start();
-                                }
-                            }).show();
-        }
-    }
-
-    public void z3(){
-        if (SettingManager.getInstance().getIsMonthLimit()
-                && SettingManager.getInstance().getIsColorRemind()) {
-            new MaterialDialog.Builder(mContext)
-                    .theme(Theme.LIGHT)
-                    .typeface(CoCoinUtil.GetTypeface(), CoCoinUtil.GetTypeface())
-                    .title(R.string.set_month_expense_dialog_title)
-                    .inputType(InputType.TYPE_CLASS_NUMBER)
-                    .positiveText(R.string.submit)
-                    .alwaysCallInputCallback()
-                    .input(null, null, new MaterialDialog.InputCallback() {
-                        @Override
-                        public void onInput(final MaterialDialog dialog, final CharSequence input) {
-                            setInput(input,dialog);
-                            dialog.getActionButton(DialogAction.POSITIVE)
-                                    .setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            SettingManager.getInstance()
-                                                    .setMonthWarning(Integer.parseInt(input.toString()));
-                                            updateSettingsToServer(UPDATE_MONTH_WARNING);
-                                            SettingManager.getInstance()
-                                                    .setMainViewRemindColorShouldChange(true);
-                                            monthWarning.withNumber(SettingManager.getInstance()
-                                                    .getMonthWarning()).setDuration(1000).start();
-                                            dialog.dismiss();
-                                        }
-                                    });
-                        }
-                    }).show();
-        }
-    }
-
-// Init the setting activity////////////////////////////////////////////////////////////////////////
+    // Init the setting activity////////////////////////////////////////////////////////////////////////
     private void init() {
         back = (MaterialIconView)findViewById(R.id.icon_left);
         back.setOnClickListener(new View.OnClickListener() {
@@ -1321,7 +1189,46 @@ public class AccountBookSettingActivity extends AppCompatActivity
         monthMaxExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                z2();
+                if (SettingManager.getInstance().getIsMonthLimit()) {
+                    new MaterialDialog.Builder(mContext)
+                            .theme(Theme.LIGHT)
+                            .typeface(CoCoinUtil.GetTypeface(), CoCoinUtil.GetTypeface())
+                            .title(R.string.set_month_expense_dialog_title)
+                            .inputType(InputType.TYPE_CLASS_NUMBER)
+                            .positiveText(R.string.submit)
+                            .inputRange(3, 5)
+                            .input(SettingManager.getInstance().getMonthLimit().toString()
+                                    , null, new MaterialDialog.InputCallback() {
+                                        @Override
+                                        public void onInput(MaterialDialog dialog, CharSequence input) {
+                                            int newExpense = SettingManager.getInstance().getMonthLimit();
+                                            if (input.length() != 0) {
+                                                newExpense = Integer.parseInt(input.toString());
+                                            }
+                                            // the month limit must be smaller than the month warning
+                                            if (newExpense < SettingManager.getInstance().getMonthWarning()) {
+                                                SettingManager.getInstance().setMonthWarning(
+                                                        ((int)(newExpense * 0.8) / 100 * 100));
+                                                if (SettingManager.getInstance().getMonthWarning() < 100) {
+                                                    SettingManager.getInstance().setMonthWarning(100);
+                                                }
+                                                updateSettingsToServer(UPDATE_MONTH_WARNING);
+                                                SettingManager.getInstance()
+                                                        .setMainViewRemindColorShouldChange(true);
+                                                monthWarning.setText(SettingManager
+                                                        .getInstance().getMonthWarning().toString());
+                                            }
+                                            SettingManager.getInstance().setMonthLimit(newExpense);
+                                            updateSettingsToServer(UPDATE_MONTH_LIMIT);
+                                            SettingManager.getInstance()
+                                                    .setTodayViewMonthExpenseShouldChange(true);
+                                            SettingManager.getInstance()
+                                                    .setMainViewMonthExpenseShouldChange(true);
+                                            monthMaxExpense.withNumber(SettingManager.getInstance()
+                                                    .getMonthLimit()).setDuration(1000).start();
+                                        }
+                                    }).show();
+                }
             }
         });
         monthWarning = (RiseNumberTextView)findViewById(R.id.warning_expense);
@@ -1331,7 +1238,36 @@ public class AccountBookSettingActivity extends AppCompatActivity
         monthWarning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                z3();
+                if (SettingManager.getInstance().getIsMonthLimit()
+                        && SettingManager.getInstance().getIsColorRemind()) {
+                    new MaterialDialog.Builder(mContext)
+                            .theme(Theme.LIGHT)
+                            .typeface(CoCoinUtil.GetTypeface(), CoCoinUtil.GetTypeface())
+                            .title(R.string.set_month_expense_dialog_title)
+                            .inputType(InputType.TYPE_CLASS_NUMBER)
+                            .positiveText(R.string.submit)
+                            .alwaysCallInputCallback()
+                            .input(null, null, new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(final MaterialDialog dialog, final CharSequence input) {
+                                    setInput(input,dialog);
+                                    dialog.getActionButton(DialogAction.POSITIVE)
+                                            .setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    SettingManager.getInstance()
+                                                            .setMonthWarning(Integer.parseInt(input.toString()));
+                                                    updateSettingsToServer(UPDATE_MONTH_WARNING);
+                                                    SettingManager.getInstance()
+                                                            .setMainViewRemindColorShouldChange(true);
+                                                    monthWarning.withNumber(SettingManager.getInstance()
+                                                            .getMonthWarning()).setDuration(1000).start();
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                }
+                            }).show();
+                }
             }
         });
 // change month remind color////////////////////////////////////////////////////////////////////////
@@ -1437,10 +1373,6 @@ public class AccountBookSettingActivity extends AppCompatActivity
         hollowSB.setCheckedImmediately(SettingManager.getInstance().getIsHollow());
         setHollowState(SettingManager.getInstance().getIsHollow());
     }
-
-
-
-
     public void setMonthWar(RiseNumberTextView monthWarning) {
         if (SettingManager.getInstance().getIsMonthLimit()
                 && SettingManager.getInstance().getIsColorRemind())
@@ -1472,7 +1404,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         }
     }
     public void setLogenOn(boolean loggenOn ,TextView userName, TextView userEmail, TextView loginButton ) {
-        boolean loggenOn = SettingManager.getInstance().getLoggenOn();
+        loggenOn = SettingManager.getInstance().getLoggenOn();
         if (loggenOn) {
             // is logged on, set the user name and email
             userName.setText(SettingManager.getInstance().getUserName());
@@ -1493,30 +1425,12 @@ public class AccountBookSettingActivity extends AppCompatActivity
             canBeUpdatedTV.setVisibility(View.GONE);
         }
     }
-        public void setMaxExpense(RiseNumberTextView monthMaxExpense) {
-            if (SettingManager.getInstance().getIsMonthLimit())
-                monthMaxExpense.withNumber(SettingManager.getInstance()
-                        .getMonthLimit()).setDuration(1000).start();
-        }
-
-        public void q1(){
-            if (isMonthLimit && isMonthColorRemind) {
-                monthColorRemindSelect.setEnabled(true);
-                monthColorRemindSelect
-                        .setColor(SettingManager.getInstance().getRemindColor());
-                monthWarning.setEnabled(true);
-                monthWarning.setTextColor(
-                        ContextCompat.getColor(mContext, R.color.drawer_text));
-            } else {
-                monthColorRemindSelect.setEnabled(false);
-                monthColorRemindSelect
-                        .setColor(mContext.getResources().getColor(R.color.my_gray));
-                monthWarning.setEnabled(false);
-                monthWarning.setTextColor(
-                        ContextCompat.getColor(mContext, R.color.my_gray));
-            }
-        }
-// Set all states about month limit/////////////////////////////////////////////////////////////////
+    public void setMaxExpense(RiseNumberTextView monthMaxExpense) {
+        if (SettingManager.getInstance().getIsMonthLimit())
+            monthMaxExpense.withNumber(SettingManager.getInstance()
+                    .getMonthLimit()).setDuration(1000).start();
+    }
+    // Set all states about month limit/////////////////////////////////////////////////////////////////
     private void setMonthState() {
         boolean isMonthLimit = SettingManager.getInstance().getIsMonthLimit();
         boolean isMonthColorRemind = SettingManager.getInstance().getIsColorRemind();
@@ -1542,7 +1456,21 @@ public class AccountBookSettingActivity extends AppCompatActivity
         setIconEnable(monthColorRemindTypeIcon, isMonthColorRemind);
         setIconEnable(monthColorRemindSelect, isMonthLimit );
         setIconEnable(monthColorRemindSelect,isMonthColorRemind);
-        q1();
+        if (isMonthLimit && isMonthColorRemind) {
+            monthColorRemindSelect.setEnabled(true);
+            monthColorRemindSelect
+                    .setColor(SettingManager.getInstance().getRemindColor());
+            monthWarning.setEnabled(true);
+            monthWarning.setTextColor(
+                    ContextCompat.getColor(mContext, R.color.drawer_text));
+        } else {
+            monthColorRemindSelect.setEnabled(false);
+            monthColorRemindSelect
+                    .setColor(mContext.getResources().getColor(R.color.my_gray));
+            monthWarning.setEnabled(false);
+            monthWarning.setTextColor(
+                    ContextCompat.getColor(mContext, R.color.my_gray));
+        }
         setIconEnable(monthForbiddenIcon, isMonthLimit);
         setIconEnable(monthForbiddenIcon, isForbidden);
 
@@ -1572,7 +1500,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         else tv.setTextColor(mContext.getResources().getColor(R.color.my_gray));
     }
 
-// choose a color///////////////////////////////////////////////////////////////////////////////////
+    // choose a color///////////////////////////////////////////////////////////////////////////////////
     @Override
     public void onColorSelection(ColorChooserDialog dialog, int selectedColor) {
         monthColorRemindSelect.setColor(selectedColor);
@@ -1592,7 +1520,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
                     .dynamicButtonColor(true)
                     .build();
 
-// whether sync the settings from server////////////////////////////////////////////////////////////
+    // whether sync the settings from server////////////////////////////////////////////////////////////
     private void whetherSyncSettingsFromServer() {
         new MaterialDialog.Builder(this)
                 .iconRes(R.drawable.cocoin_logo)
@@ -1676,15 +1604,15 @@ public class AccountBookSettingActivity extends AppCompatActivity
                             user.setIsHollow(SettingManager.getInstance().getIsHollow());
                             user.update(CoCoinApplication.getAppContext(),
                                     user.getObjectId(), new UpdateListener() {
-                                @Override
-                                public void onSuccess() {
-                                    showToast(9, "");
-                                }
-                                @Override
-                                public void onFailure(int code, String msg) {
-                                    showToast(10, msg);
-                                }
-                            });
+                                        @Override
+                                        public void onSuccess() {
+                                            showToast(9, "");
+                                        }
+                                        @Override
+                                        public void onFailure(int code, String msg) {
+                                            showToast(10, msg);
+                                        }
+                                    });
                         }
                         dialog.dismiss();
                     }
@@ -1698,86 +1626,59 @@ public class AccountBookSettingActivity extends AppCompatActivity
         updateSettingsToServer(2);
     }
 
-    public void w1(){
-        updateMontLimit(setting,currentUser);
-        updateColorRemind(setting,currentUser);
-    }
-
-    public void w2(){
-        updateMonthWarning(setting,currentUser);
-        updateRwmindColor(setting,currentUser);
-    }
-
-    public void w3(){
-        updateIsForbidden(setting,currentUser);
-        updateAccountBookName(setting,currentUser);
-    }
-
-    public void w4(){
-        updateAccountBookPassword(setting,currentUser);
-        updateShowPicture(setting,currentUser);
-    }
-
-    public void w5(){
-        updateIsHollow(setting,currentUser);
-        updateLogoId(setting,currentUser);
-    }
-
-    public void w6(){
-        @Override
-        public void onSuccess() {
-            Log.d("Saver", "Update " + setting + " successfully.");
-            // the new account book name is updated to server successfully
-            updateAccountcaseB(setting);
-        }
-
-        @Override
-        public void onFailure(int code, String msg) {
-            Log.d("Saver", "Update " + setting + " fail.");
-            updateAccountcaseA(setting);
-        }
-    }
-
-
-// update part of settings//////////////////////////////////////////////////////////////////////////
+    // update part of settings//////////////////////////////////////////////////////////////////////////
     private void updateSettingsToServer(final int setting) {
         User currentUser = getCurrentUser();
         checkUser(currentUser);
-        w1();
-        w2();
-        w3();
-        w4();
-        w5();
+        updateMontLimit(setting,currentUser);
+        updateColorRemind(setting,currentUser);
+        updateMonthWarning(setting,currentUser);
+        updateRwmindColor(setting,currentUser);
+        updateIsForbidden(setting,currentUser);
+        updateAccountBookName(setting,currentUser);
+        updateAccountBookPassword(setting,currentUser);
+        updateShowPicture(setting,currentUser);
+        updateIsHollow(setting,currentUser);
+        updateLogoId(setting,currentUser);
         currentUser.update(CoCoinApplication.getAppContext(),
                 currentUser.getObjectId(), new UpdateListener() {
-                    w6();
+                    @Override
+                    public void onSuccess() {
+                        Log.d("Saver", "Update " + setting + " successfully.");
+                        // the new account book name is updated to server successfully
+                        updateAccountcaseB(setting);
+                    }
+
+                    @Override
+                    public void onFailure(int code, String msg) {
+                        Log.d("Saver", "Update " + setting + " fail.");
+                        updateAccountcaseA(setting);
+                    }
                 });
     }
-
-
     public void updateMontLimit(int setting, User currentUser){
         if(setting == UPDATE_IS_MONTH_LIMIT)
-        currentUser.setIsMonthLimit(SettingManager.getInstance().getIsMonthLimit());
+            currentUser.setIsMonthLimit(SettingManager.getInstance().getIsMonthLimit());
     }
     public void updateColorRemind(int setting, User currentUser){
         if(setting == UPDATE_IS_COLOR_REMIND)
-        // is color remind
-        currentUser.setIsColorRemind(SettingManager.getInstance().getIsColorRemind());
+            // is color remind
+            currentUser.setIsColorRemind(SettingManager.getInstance().getIsColorRemind());
     }
     public void updateMonthWarning(int setting, User currentUser){
         if(setting == UPDATE_MONTH_WARNING)
-        // month warning
-        currentUser.setMonthWarning(SettingManager.getInstance().getMonthWarning());
+            // month warning
+            currentUser.setMonthWarning(SettingManager.getInstance().getMonthWarning());
     }
     public void updateRwmindColor(int setting, User currentUser){
         if(setting == UPDATE_REMIND_COLOR)
-        // remind color
-        currentUser.setRemindColor(SettingManager.getInstance().getRemindColor());
+            // remind color
+            currentUser.setRemindColor(SettingManager.getInstance().getRemindColor());
     }
     public void updateAccountBookName(int setting, User currentUser){
         if(setting == UPDATE_ACCOUNT_BOOK_NAME)
-        // account book name
-        currentUser.setAccountBookName(SettingManager.getInstance().getAccountBookName());
+            // account book name
+            currentUser.setAccountBookName(SettingManager.getInstance().getAccountBookName());
     }
     public void updateIsForbidden(int setting, User currentUser){
         if(setting == UPDATE_IS_FORBIDDEN)
@@ -1786,23 +1687,23 @@ public class AccountBookSettingActivity extends AppCompatActivity
     }
     public void updateAccountBookPassword(int setting, User currentUser){
         if(setting ==UPDATE_ACCOUNT_BOOK_PASSWORD)
-        // account book password
-        currentUser.setAccountBookPassword(SettingManager.getInstance().getPassword());
+            // account book password
+            currentUser.setAccountBookPassword(SettingManager.getInstance().getPassword());
     }
     public void updateShowPicture(int setting, User currentUser){
         if(setting == UPDATE_SHOW_PICTURE)
-        // show picture
-        currentUser.setShowPicture(SettingManager.getInstance().getShowPicture());
+            // show picture
+            currentUser.setShowPicture(SettingManager.getInstance().getShowPicture());
     }
     public void updateIsHollow(int setting, User currentUser){
         if(setting == UPDATE_IS_HOLLOW)
-        // is hollow
-        currentUser.setIsHollow(SettingManager.getInstance().getIsHollow());
+            // is hollow
+            currentUser.setIsHollow(SettingManager.getInstance().getIsHollow());
     }
     public void updateLogoId(int setting, User currentUser){
         if(setting == UPDATE_LOGO_ID)
-        // has a logo which has been updated
-        currentUser.setLogoObjectId(SettingManager.getInstance().getLogoObjectId());
+            // has a logo which has been updated
+            currentUser.setLogoObjectId(SettingManager.getInstance().getLogoObjectId());
     }
 
 
@@ -1827,17 +1728,17 @@ public class AccountBookSettingActivity extends AppCompatActivity
 
     }
 
-// Get the current user/////////////////////////////////////////////////////////////////////////////
+    // Get the current user/////////////////////////////////////////////////////////////////////////////
     private User getCurrentUser() {
         return BmobUser.getCurrentUser(CoCoinApplication.getAppContext(), User.class);
     }
 
-// Get string///////////////////////////////////////////////////////////////////////////////////////
+    // Get string///////////////////////////////////////////////////////////////////////////////////////
     private String getResourceString(int resourceId) {
         return CoCoinApplication.getAppContext().getResources().getString(resourceId);
     }
 
-// activity finish//////////////////////////////////////////////////////////////////////////////////
+    // activity finish//////////////////////////////////////////////////////////////////////////////////
     @Override
     public void finish() {
 
@@ -1846,19 +1747,14 @@ public class AccountBookSettingActivity extends AppCompatActivity
         super.finish();
     }
 
-    public void a1(){
+    // Show toast///////////////////////////////////////////////////////////////////////////////////////
+    private void showToast(int toastType, String msg) {
         Log.d("CoCoin", msg);
         SuperToast.cancelAllSuperToasts();
         SuperToast superToast = new SuperToast(mContext);
-    }
 
-
-
-// Show toast///////////////////////////////////////////////////////////////////////////////////////
-    private void showToast(int toastType, String msg) {
-        a1();
-
-        a2();
+        superToast.setAnimations(CoCoinUtil.TOAST_ANIMATION);
+        superToast.setDuration(SuperToast.Duration.LONG);
         superToast.setTextColor(Color.parseColor("#ffffff"));
         superToast.setTextSize(SuperToast.TextSize.SMALL);
 
@@ -1872,7 +1768,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
         // the new account book name is failed to change
         setSupportCase3(toastType,superToast);
         // register successfully
-        setSupportCase4(toastType,superToast,tip);
+        setSupportCase4(toastType,superToast,tip, msg);
         // register failed
         setSupportCase5(toastType,superToast,tip,msg);
         // login successfully
@@ -1922,7 +1818,7 @@ public class AccountBookSettingActivity extends AppCompatActivity
             superToast.setBackground(SuperToast.Background.RED);
         }
     }
-    public void setSupportCase4(int toastType,SuperToast superToast,String tip){
+    public void setSupportCase4(int toastType,SuperToast superToast,String tip, String msg){
         if( toastType ==4){
             // register successfully
             tip = msg;

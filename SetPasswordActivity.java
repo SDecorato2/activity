@@ -1,25 +1,9 @@
 package com.nightonke.saver.activity;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Interpolator;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import java.awt.Color;
+import java.awt.Window;
+
+import javax.swing.text.View;
 
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.nightonke.saver.R;
@@ -28,18 +12,29 @@ import com.nightonke.saver.adapter.PasswordChangeFragmentAdapter;
 import com.nightonke.saver.fragment.CoCoinFragmentManager;
 import com.nightonke.saver.fragment.PasswordChangeFragment;
 import com.nightonke.saver.model.SettingManager;
-import com.nightonke.saver.model.User;
-import com.nightonke.saver.ui.FixedSpeedScroller;
 import com.nightonke.saver.ui.MyGridView;
 import com.nightonke.saver.util.CoCoinUtil;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.User;
 
-import net.steamcrafted.materialiconlib.MaterialIconView;
-
-import java.lang.reflect.Field;
-
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.UpdateListener;
+import net.steamcrafted.materialiconlib.MaterialIconView;
 
+/**
+ * SetPasswordActivity
+ */
 public class SetPasswordActivity extends AppCompatActivity {
 
     private Context mContext;
@@ -88,23 +83,6 @@ public class SetPasswordActivity extends AppCompatActivity {
 
         viewPager = (ViewPager)findViewById(R.id.viewpager);
 
-        /*
-        removed animation because this code provokes a reflection
-         */
-/*        try {
-            Interpolator sInterpolator = new AccelerateInterpolator();
-            Field mScroller;
-            mScroller = ViewPager.class.getDeclaredField("mScroller");
-            mScroller.setAccessible(true);
-            FixedSpeedScroller scroller
-                    = new FixedSpeedScroller(viewPager.getContext(), sInterpolator);
-            scroller.setmDuration(1000);
-            mScroller.set(viewPager, scroller);
-        } catch (NoSuchFieldException e) {
-        } catch (IllegalArgumentException e) {
-        } catch (IllegalAccessException e) {
-        }*/
-
         passwordAdapter = new PasswordChangeFragmentAdapter(
                 getSupportFragmentManager());
 
@@ -123,6 +101,9 @@ public class SetPasswordActivity extends AppCompatActivity {
         myGridView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
+                    /**
+                     * onGlobalLayout
+                     */
                     public void onGlobalLayout() {
                         myGridView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                         View lastChild = myGridView.getChildAt(myGridView.getChildCount() - 1);
@@ -148,11 +129,17 @@ public class SetPasswordActivity extends AppCompatActivity {
     }
 
     @Override
+    /**
+     * onBackPressed
+     */
     public void onBackPressed() {
 
     }
 
     @Override
+    /**
+     * finish
+     */
     public void finish() {
         SuperToast.cancelAllSuperToasts();
         super.finish();
@@ -161,6 +148,9 @@ public class SetPasswordActivity extends AppCompatActivity {
     private AdapterView.OnItemClickListener gridViewClickListener
             = new AdapterView.OnItemClickListener() {
         @Override
+        /**
+         * onItemClick
+         */
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             buttonClickOperation(false, position);
         }
@@ -169,6 +159,9 @@ public class SetPasswordActivity extends AppCompatActivity {
     private AdapterView.OnItemLongClickListener gridViewLongClickListener
             = new AdapterView.OnItemLongClickListener() {
         @Override
+        /**
+         * onItemLongClick
+         */
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             buttonClickOperation(true, position);
             return true;
@@ -232,11 +225,17 @@ public class SetPasswordActivity extends AppCompatActivity {
                         currentUser.update(CoCoinApplication.getAppContext(),
                                 currentUser.getObjectId(), new UpdateListener() {
                                     @Override
+                                    /**
+                                     * onSuccess
+                                     */
                                     public void onSuccess() {
                                         Log.d("Saver", "Set password successfully.");
                                     }
 
                                     @Override
+                                    /**
+                                     * onFailure
+                                     */
                                     public void onFailure(int code, String msg) {
                                         Log.d("Saver", "Set password failed.");
                                     }
@@ -245,6 +244,9 @@ public class SetPasswordActivity extends AppCompatActivity {
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
+                        /**
+                         * run
+                         */
                         public void run() {
                             finish();
                         }
@@ -319,6 +321,9 @@ public class SetPasswordActivity extends AppCompatActivity {
     }
 
     @Override
+    /**
+     * dispatchTouchEvent
+     */
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
         switch (ev.getAction()) {

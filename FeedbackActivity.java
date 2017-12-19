@@ -1,15 +1,9 @@
 package com.nightonke.saver.activity;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
+import java.awt.Color;
+import java.awt.MenuItem;
+
+import javax.swing.text.View;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
@@ -19,6 +13,16 @@ import com.nightonke.saver.adapter.HelpFragmentAdapter;
 import com.nightonke.saver.fragment.HelpFeedbackFragment;
 import com.nightonke.saver.util.CoCoinUtil;
 
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
+/**
+ * FeedbackActivity
+ */
 public class FeedbackActivity extends AppCompatActivity implements HelpFeedbackFragment.OnTextChangeListener {
 
     private MaterialViewPager mViewPager;
@@ -65,6 +69,9 @@ public class FeedbackActivity extends AppCompatActivity implements HelpFeedbackF
         if (logo != null) {
             logo.setOnClickListener(new View.OnClickListener() {
                 @Override
+                /**
+                 * onClick
+                 */
                 public void onClick(View v) {
                     mViewPager.notifyHeaderChanged();
                 }
@@ -80,6 +87,9 @@ public class FeedbackActivity extends AppCompatActivity implements HelpFeedbackF
 
         mViewPager.setMaterialViewPagerListener(new MaterialViewPager.Listener() {
             @Override
+            /**
+             * HeaderDesign
+             */
             public HeaderDesign getHeaderDesign(int page) {
                 return HeaderDesign.fromColorAndDrawable(
                         ContextCompat.getColor(CoCoinApplication.getAppContext(), R.color.my_blue),
@@ -107,6 +117,9 @@ public class FeedbackActivity extends AppCompatActivity implements HelpFeedbackF
     }
 
     @Override
+    /**
+     * onOptionsItemSelected
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
@@ -115,6 +128,9 @@ public class FeedbackActivity extends AppCompatActivity implements HelpFeedbackF
     private String feedbackText = "";
     private boolean exceed;
     @Override
+    /**
+     * onTextChange
+     */
     public void onTextChange(String text, boolean exceed) {
         feedbackText = text;
         this.exceed = exceed;

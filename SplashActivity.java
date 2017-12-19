@@ -32,6 +32,10 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.view.LineChartView;
 
+/**
+ * @author
+ * @version
+ */
 public class SplashActivity extends Activity {
 
     private Context mContext;
@@ -139,7 +143,6 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onAnimationRepeat() {
-
             }
         });
         hasAnimationStarted = true;
@@ -154,7 +157,7 @@ public class SplashActivity extends Activity {
         }
     }
 
-    public class InitData extends AsyncTask<String, Void, String> {
+    protected class InitData extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {

@@ -1,24 +1,13 @@
 package com.nightonke.saver.activity;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
+import java.awt.MenuItem;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.swing.text.View;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
@@ -30,28 +19,39 @@ import com.github.florent37.materialviewpager.header.HeaderDesign;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.nightonke.saver.BuildConfig;
+import com.nightonke.saver.R;
 import com.nightonke.saver.adapter.DrawerMonthViewRecyclerViewAdapter;
 import com.nightonke.saver.adapter.DrawerMonthViewRecyclerViewAdapter.OnItemClickListener;
 import com.nightonke.saver.adapter.MonthViewFragmentAdapter;
-import com.nightonke.saver.R;
 import com.nightonke.saver.model.Logo;
 import com.nightonke.saver.model.RecordManager;
 import com.nightonke.saver.model.SettingManager;
-import com.nightonke.saver.model.User;
 import com.nightonke.saver.ui.CustomSliderView;
 import com.nightonke.saver.util.CoCoinUtil;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.User;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.List;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * AccountBookMonthViewActivity
+ */
 public class AccountBookMonthViewActivity extends AppCompatActivity {
 
     private MaterialViewPager mViewPager;
@@ -125,6 +125,9 @@ public class AccountBookMonthViewActivity extends AppCompatActivity {
         if (logo != null) {
             logo.setOnClickListener(new View.OnClickListener() {
                 @Override
+                /**
+                 * onClick
+                 */
                 public void onClick(View v) {
                     mViewPager.notifyHeaderChanged();
                 }
@@ -141,6 +144,9 @@ public class AccountBookMonthViewActivity extends AppCompatActivity {
 
         mViewPager.setMaterialViewPagerListener(new MaterialViewPager.Listener() {
             @Override
+            /**
+             * HeaderDesign
+             */
             public HeaderDesign getHeaderDesign(int page) {
                 return HeaderDesign.fromColorAndDrawable(
                         CoCoinUtil.GetTagColor(RecordManager.TAGS.get(page).getId()),
@@ -157,11 +163,17 @@ public class AccountBookMonthViewActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         drawerMonthViewRecyclerViewAdapter.SetOnItemClickListener(new OnItemClickListener() {
             @Override
+            /**
+             * onItemClick
+             */
             public void onItemClick(View view, int position) {
                 mViewPager.getViewPager().setCurrentItem(position);
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
+                    /**
+                     * run
+                     */
                     public void run() {
                         mDrawer.closeDrawers();
                     }
@@ -172,6 +184,9 @@ public class AccountBookMonthViewActivity extends AppCompatActivity {
         profileImage= (CircleImageView)mDrawer.findViewById(R.id.profile_image);
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
+            /**
+             * onClick
+             */
             public void onClick(View v) {
                 if (SettingManager.getInstance().getLoggenOn()) {
                     CoCoinUtil.showToast(mContext, R.string.change_logo_tip);
@@ -209,6 +224,9 @@ public class AccountBookMonthViewActivity extends AppCompatActivity {
     }
 
     @Override
+    /**
+     * onResume
+     */
     public void onResume() {
 
         if (mDemoSlider != null) mDemoSlider.startAutoCycle();
@@ -235,12 +253,18 @@ public class AccountBookMonthViewActivity extends AppCompatActivity {
     }
 
     @Override
+    /**
+     * onOptionsItemSelected
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         return mDrawerToggle.onOptionsItemSelected(item) ||
                 super.onOptionsItemSelected(item);
     }
 
     @Override
+    /**
+     * onBackPressed
+     */
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawers();
@@ -262,6 +286,9 @@ public class AccountBookMonthViewActivity extends AppCompatActivity {
                     bmobQuery.findObjects(CoCoinApplication.getAppContext()
                             , new FindListener<Logo>() {
                                 @Override
+                                /**
+                                 *onSuccess 
+                                 */
                                 public void onSuccess(List<Logo> object) {
                                     // there has been an old logo in the server/////////////////////////////////////////////////////////
                                     String url = object.get(0).getFile().getFileUrl(CoCoinApplication.getAppContext());
@@ -271,6 +298,9 @@ public class AccountBookMonthViewActivity extends AppCompatActivity {
                                                     + CoCoinUtil.LOGO_NAME))
                                             .setCallback(new FutureCallback<File>() {
                                                 @Override
+                                                /**
+                                                 * onCompleted
+                                                 */
                                                 public void onCompleted(Exception e, File file) {
                                                     profileImage.setImageBitmap(BitmapFactory.decodeFile(
                                                             CoCoinApplication.getAppContext().getFilesDir()
@@ -279,6 +309,9 @@ public class AccountBookMonthViewActivity extends AppCompatActivity {
                                             });
                                 }
                                 @Override
+                                /**
+                                 * onError
+                                 */
                                 public void onError(int code, String msg) {
                                     // the picture is lost
                                     if (BuildConfig.DEBUG) Log.d("CoCoin", "Can't find the old logo in server.");

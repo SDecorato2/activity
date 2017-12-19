@@ -41,8 +41,12 @@ import java.lang.reflect.Field;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.UpdateListener;
 
+/**
+ * @author liu ji
+ * @version 1.4
+ */
 public class EditPasswordActivity extends AppCompatActivity {
-
+    //some declarations
     private Context mContext;
 
     private MyGridView myGridView;
@@ -185,7 +189,7 @@ public class EditPasswordActivity extends AppCompatActivity {
     };
 
 
-    private void caseVerifyState(int position){
+    private void caseVerifyState(boolean longClick, int position){
         if (CoCoinUtil.ClickButtonDelete(position)) {
             if (longClick) {
                 CoCoinFragmentManager.passwordChangeFragment[CURRENT_STATE].init();
@@ -220,7 +224,7 @@ public class EditPasswordActivity extends AppCompatActivity {
         }
     }
 
-    private void caseNewPass(int position){
+    private void caseNewPass(boolean longClick, int position){
         if (CoCoinUtil.ClickButtonDelete(position)) {
             if (longClick) {
                 CoCoinFragmentManager.passwordChangeFragment[CURRENT_STATE].init();
@@ -308,10 +312,10 @@ public class EditPasswordActivity extends AppCompatActivity {
     private void buttonClickOperation(boolean longClick, int position) {
         switch (CURRENT_STATE) {
             case VERIFY_STATE:
-                caseVerifyState(position);
+                caseVerifyState(longClick, position);
                 break;
             case NEW_PASSWORD:
-                caseNewPass(position);
+                caseNewPass(longClick, position);
                 break;
             case PASSWORD_AGAIN:
                 casePassAgain(longClick, position);

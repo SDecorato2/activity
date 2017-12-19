@@ -30,6 +30,10 @@ import com.nightonke.saver.model.SettingManager;
 
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
+/**
+ * @author
+ * @author
+ */
 public class TagSettingActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
@@ -186,10 +190,14 @@ public class TagSettingActivity extends AppCompatActivity {
         }
     }
 
-    public class SaveTags extends AsyncTask<String, Void, String> {
+    protected class SaveTags extends AsyncTask<String, Void, String> {
 
         private boolean quit;
 
+        /**
+         *
+         * @param quit
+         */
         public SaveTags(boolean quit) {
             this.quit = quit;
         }
@@ -216,5 +224,4 @@ public class TagSettingActivity extends AppCompatActivity {
     public void onBackPressed() {
         whetherQuit();
     }
-
 }
