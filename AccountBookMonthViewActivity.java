@@ -323,7 +323,7 @@ public class AccountBookMonthViewActivity extends AppCompatActivity {
                     profileImage.setImageBitmap(b);
                 }
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                log.error("Logo File not Found!", e);
             }
         } else {
             // use the default logo

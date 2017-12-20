@@ -131,8 +131,8 @@ public class FeedbackActivity extends AppCompatActivity implements HelpFeedbackF
     /**
      * onTextChange
      */
-    public void onTextChange(String text, boolean exceed) {
+    public void onTextChange(String text, boolean exceedd) {
         feedbackText = text;
-        this.exceed = exceed;
+        this.exceed = exceedd;
     }
 }
